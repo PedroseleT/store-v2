@@ -66,7 +66,7 @@ export const products = [
   {
     id: "secador-mondial-white-rose",
     name: "Secador Mondial White Rose Line (usado)",
-    price: 49.90,
+    price: 119.90,
     size: "2000W",
     status: "vendido",
     description: "Potência e sofisticação para o cuidado dos seus cabelos. O secador Mondial da linha White Rose conta com tecnologia Tourmaline Ion, que libera íons para selar as cutículas, garantindo brilho intenso e zero frizz. Com 2000W de potência, oferece 3 temperaturas e jato de ar frio para fixar a modelagem. Design elegante e ergonômico para resultados de salão em casa.",
