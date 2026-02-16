@@ -1,4 +1,19 @@
 export const products = [
+  // Cabo Apple Lightning para USB-C
+  {
+    id: "cabo-apple-lightning-usbc",
+    name: "Cabo ORIGINAL Apple Lightning para USB-C (nunca usado)",
+    price: 99.90,
+    size: "1m",
+    status: "disponivel",
+    description: "Conectividade de alta performance e carregamento ultra rápido. Este cabo conecta seu iPhone, iPad ou iPod com conector Lightning diretamente à porta USB-C do seu computador ou adaptador de energia para uma recarga eficiente. Compatível com a tecnologia Fast Charge, permite carregar até 50% da bateria em 30 minutos em modelos compatíveis. Design minimalista e autêntico 'Designed by Apple in California'.",
+    images: [
+      "/img/cabo_iphone_1.jpg",
+      "/img/cabo_iphone_2.jpg",
+      "/img/cabo_iphone_3.jpg"
+    ]
+  },
+  
   // Calça Jeans Baggy - Azul Claro
   {
     id: "calca-jeans-baggy",
@@ -74,21 +89,6 @@ export const products = [
       "/img/secador1.jpeg",
       "/img/secador2.jpeg",
       "/img/secador3.jpeg"
-    ]
-  },
-
-  // Cabo Apple Lightning para USB-C
-  {
-    id: "cabo-apple-lightning-usbc",
-    name: "Cabo ORIGINAL Apple Lightning para USB-C (nunca usado)",
-    price: 99.90,
-    size: "1m",
-    status: "disponivel",
-    description: "Conectividade de alta performance e carregamento ultra rápido. Este cabo conecta seu iPhone, iPad ou iPod com conector Lightning diretamente à porta USB-C do seu computador ou adaptador de energia para uma recarga eficiente. Compatível com a tecnologia Fast Charge, permite carregar até 50% da bateria em 30 minutos em modelos compatíveis. Design minimalista e autêntico 'Designed by Apple in California'.",
-    images: [
-      "/img/cabo_iphone_1.jpg",
-      "/img/cabo_iphone_2.jpg",
-      "/img/cabo_iphone_3.jpg"
     ]
   }
 ];
