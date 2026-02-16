@@ -5,7 +5,7 @@ export const products = [
     name: "Calça Jeans Super Baggy - Light Blue (novo)",
     price: 49.90,
     size: "42/43 - GG",
-    status: "disponivel",
+    status: "Vendido",
     description: "Com uma lavagem clara e atemporal, esta calça super baggy traz o equilíbrio perfeito entre o conforto e a tendência oversized. Confeccionada em denim de alta qualidade, possui modelagem ampla que garante liberdade de movimento e um visual urbano autêntico. Ideal para compor looks que vão do casual ao streetwear com facilidade.",
     images: [
       "/img/calca2.jpeg",
@@ -74,6 +74,21 @@ export const products = [
       "/img/secador1.jpeg",
       "/img/secador2.jpeg",
       "/img/secador3.jpeg"
+    ]
+  },
+
+  // Cabo Apple Lightning para USB-C
+  {
+    id: "cabo-apple-lightning-usbc",
+    name: "Cabo ORIGINAL Apple Lightning para USB-C (nunca usado)",
+    price: 99.90,
+    size: "1m",
+    status: "disponivel",
+    description: "Conectividade de alta performance e carregamento ultra rápido. Este cabo conecta seu iPhone, iPad ou iPod com conector Lightning diretamente à porta USB-C do seu computador ou adaptador de energia para uma recarga eficiente. Compatível com a tecnologia Fast Charge, permite carregar até 50% da bateria em 30 minutos em modelos compatíveis. Design minimalista e autêntico 'Designed by Apple in California'.",
+    images: [
+      "/img/cabo_iphone_1.jpg",
+      "/img/cabo_iphone_2.jpg",
+      "/img/cabo_iphone_3.jpg"
     ]
   }
 ];
