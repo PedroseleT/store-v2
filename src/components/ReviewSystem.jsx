@@ -89,7 +89,7 @@ export default function ReviewSystem({ productId }) {
           <textarea 
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="O que você achou deste produto?"
+            placeholder="Qual produto você comprou? E o que você achou deste produto?"
             className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black"
             rows="3"
           />
