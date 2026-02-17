@@ -19,7 +19,7 @@ export function Header() {
         {/* COLUNA 2: TEXTO CENTRALIZADO */}
         <div className="flex justify-center">
           <h2 className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-[0.2em] text-center leading-tight">
-            PRODUTOS QUE COMPREI E QUERO ME DESAPEGAR
+            PRODUTOS QUE COMPREI - TESTE 123
           </h2>
         </div>
 
