@@ -18,8 +18,11 @@ function App() {
           </Routes>
         </main>
 
-        {/* O Sistema de Avaliação fica aqui, fixo no rodapé de todas as páginas */}
-        <div className="max-w-6xl mx-auto w-full px-6 mb-8">
+        {/* ESTE É O LUGAR CERTO: 
+           Fora do <Routes> para aparecer em todas as páginas,
+           e antes do <Footer /> para ficar acima dos créditos.
+        */}
+        <div className="max-w-6xl mx-auto w-full px-6 mb-10">
           <ReviewSystem productId="geral" />
         </div>
         
