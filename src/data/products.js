@@ -5,7 +5,7 @@ export const products = [
     name: "Cabo ORIGINAL Apple Lightning para USB-C (nunca usado)",
     price: 99.90,
     size: "1m",
-    status: "vendido",
+    status: "disponivel",
     description: "Conectividade de alta performance e carregamento ultra rápido. Este cabo conecta seu iPhone, iPad ou iPod com conector Lightning diretamente à porta USB-C do seu computador ou adaptador de energia para uma recarga eficiente. Compatível com a tecnologia Fast Charge, permite carregar até 50% da bateria em 30 minutos em modelos compatíveis. Design minimalista e autêntico 'Designed by Apple in California'.",
     images: [
       "/img/cabo_iphone_1.jpg",
