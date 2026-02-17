@@ -75,20 +75,23 @@ export default function ReviewSystem({ productId }) {
             className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black"
             rows="3"
           />
-          <div className="flex justify-between items-center mt-3">
+          
+          {/* CONTAINER AJUSTADO: Alinha nota e botão */}
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-3">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-600">Sua nota:</span>
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Sua nota:</span>
               <select 
                 value={rating} 
                 onChange={(e) => setRating(Number(e.target.value))}
-                className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-sm outline-none cursor-pointer text-black"
+                className="bg-white border border-gray-300 rounded-lg px-2 h-[40px] text-sm outline-none cursor-pointer text-black min-w-[70px]"
               >
                 {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} ★</option>)}
               </select>
             </div>
+
             <button 
               onClick={handleReview}
-              className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 md:py-2 rounded-xl md:rounded-full font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md text-sm md:text-base"
+              className="bg-blue-600 text-white px-6 h-[40px] rounded-lg font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md text-sm flex items-center justify-center whitespace-nowrap"
             >
               {user ? "Publicar" : "Avaliar com Google"}
             </button>
