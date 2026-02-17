@@ -18,9 +18,10 @@ function App() {
           </Routes>
         </main>
 
-        {/* ESTE É O LUGAR CERTO: 
-           Fora do <Routes> para aparecer em todas as páginas,
-           e antes do <Footer /> para ficar acima dos créditos.
+        {/* ESTE É O SEGREDO: 
+           Colocamos o ReviewSystem FORA do <Routes>. 
+           Assim, ele aparece na Home e em qualquer outra página, 
+           sempre antes do Footer de créditos.
         */}
         <div className="max-w-6xl mx-auto w-full px-6 mb-10">
           <ReviewSystem productId="geral" />
