@@ -42,19 +42,21 @@ export default function ReviewSystem({ productId }) {
 
     let currentUser = user;
 
-    // Se não estiver logado, faz o login primeiro
+    // Lógica intuitiva: faz login e envia tudo de uma vez
     if (!currentUser) {
       try {
         const result = await signInWithPopup(auth, provider);
         currentUser = result.user;
         setUser(currentUser);
       } catch (error) {
+        if (error.code === 'auth/unauthorized-domain') {
+            alert("Domínio não autorizado. Verifique as configurações do Firebase.");
+        }
         console.error("Erro no login:", error);
-        return; // Para o fluxo se o usuário cancelar o login
+        return; 
       }
     }
 
-    // Envia o comentário (agora com o usuário garantido)
     try {
         await addDoc(collection(db, "reviews"), {
           productId,
@@ -65,8 +67,10 @@ export default function ReviewSystem({ productId }) {
           createdAt: serverTimestamp()
         });
         setComment("");
+        alert("Feedback enviado com sucesso!");
     } catch (error) {
         console.error("Erro ao enviar:", error);
+        alert("Ocorreu um erro ao enviar seu feedback.");
     }
   };
 
@@ -74,7 +78,7 @@ export default function ReviewSystem({ productId }) {
     <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
       <h3 className="text-xl font-bold mb-6 text-gray-800">Feedbacks Clientes</h3>
 
-      {/* Input de Comentário */}
+      {/* Área de Texto */}
       <div className="flex gap-4 mb-8">
         <img 
           src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"} 
@@ -112,7 +116,7 @@ export default function ReviewSystem({ productId }) {
         </div>
       </div>
 
-      {/* Lista de Comentários */}
+      {/* Lista de Feedbacks */}
       <div className="space-y-6">
         {reviews.length === 0 ? (
           <p className="text-gray-500 text-center py-4">Nenhuma avaliação ainda. Seja o primeiro!</p>
