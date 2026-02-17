@@ -88,7 +88,7 @@ export default function ReviewSystem({ productId }) {
             </div>
             <button 
               onClick={handleReview}
-              className="bg-blue-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md"
+              className="w-full md:w-auto bg-blue-600 text-white px-6 py-3 md:py-2 rounded-xl md:rounded-full font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md text-sm md:text-base"
             >
               {user ? "Publicar" : "Avaliar com Google"}
             </button>
