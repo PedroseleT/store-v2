@@ -2,7 +2,7 @@ import { useParams, Link } from "react-router-dom";
 import { products } from "../data/products";
 import { useState } from "react";
 import { ArrowLeft, MessageCircleMore } from "lucide-react";
-import ReviewSystem from "../components/ReviewSystem"; // Importando o sistema de avaliações
+import ReviewSystem from "../components/ReviewSystem";
 
 export function Product() {
   const { id } = useParams();
@@ -23,7 +23,6 @@ export function Product() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-10">
-        {/* GALERIA */}
         <div>
           <div className="bg-gray-100 rounded-lg overflow-hidden group aspect-[4/5]">
             <img
@@ -47,7 +46,6 @@ export function Product() {
           </div>
         </div>
 
-        {/* INFORMAÇÕES */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <span className={`h-3 w-3 rounded-full ${isAvailable ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
@@ -85,10 +83,8 @@ export function Product() {
               rel="noopener noreferrer"
               className="mt-10 w-full bg-green-500 text-white py-4 rounded-full font-bold flex items-center justify-center gap-3 hover:bg-green-600 transition active:scale-95 shadow-lg shadow-green-200"
             >
-              <span className="flex items-center gap-3">
-                <MessageCircleMore size={22} />
-                Me chame no Whatsapp
-              </span>
+              <MessageCircleMore size={22} />
+              Me chame no Whatsapp
             </a>
           ) : (
             <button disabled className="mt-10 w-full bg-gray-200 text-gray-500 py-4 rounded-full font-bold cursor-not-allowed">
@@ -98,10 +94,12 @@ export function Product() {
         </div>
       </div>
 
-      {/* SEÇÃO DE AVALIAÇÕES */}
-      <section className="mt-16 border-t pt-10">
-        <ReviewSystem productId={id} />
-      </section>
+      {/* ÁREA DE TESTE CRÍTICO */}
+      <div className="mt-20 text-center text-gray-400 font-bold border-b pb-2">
+        --- TESTE DE CONEXÃO ABAIXO ---
+      </div>
+      
+      <ReviewSystem productId={id} />
     </main>
   );
 }
