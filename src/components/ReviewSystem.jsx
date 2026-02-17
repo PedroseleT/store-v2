@@ -42,7 +42,6 @@ export default function ReviewSystem({ productId }) {
 
     let currentUser = user;
 
-    // Lógica intuitiva: faz login e envia tudo de uma vez
     if (!currentUser) {
       try {
         const result = await signInWithPopup(auth, provider);
@@ -78,8 +77,8 @@ export default function ReviewSystem({ productId }) {
     <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
       <h3 className="text-xl font-bold mb-6 text-gray-800">Feedbacks Clientes</h3>
 
-      {/* Área de Texto */}
-      <div className="flex gap-4 mb-8">
+      {/* Área de Input de Feedback */}
+      <div className="flex gap-4 mb-10">
         <img 
           src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"} 
           className="w-12 h-12 rounded-full border-2 border-white shadow-sm" 
@@ -90,7 +89,7 @@ export default function ReviewSystem({ productId }) {
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="Qual produto você comprou? E o que você achou deste produto?"
-            className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black"
+            className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black bg-white"
             rows="3"
           />
           
@@ -116,20 +115,44 @@ export default function ReviewSystem({ productId }) {
         </div>
       </div>
 
-      {/* Lista de Feedbacks */}
-      <div className="space-y-6">
+      {/* Lista de Feedbacks Estilo Shopee */}
+      <div className="space-y-4">
         {reviews.length === 0 ? (
-          <p className="text-gray-500 text-center py-4">Nenhuma avaliação ainda. Seja o primeiro!</p>
+          <div className="text-center py-10 bg-white rounded-xl border-2 border-dashed border-gray-200">
+            <p className="text-gray-400">Nenhuma avaliação ainda. Seja o primeiro a comentar!</p>
+          </div>
         ) : (
           reviews.map((rev) => (
-            <div key={rev.id} className="flex gap-4 border-b border-gray-100 pb-4">
-              <img src={rev.userPhoto} className="w-10 h-10 rounded-full shadow-sm" alt={rev.userName} />
-              <div className="flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold text-gray-900 text-sm">{rev.userName}</span>
-                  <span className="text-yellow-500 text-xs">{"★".repeat(rev.rating)}</span>
+            <div key={rev.id} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex gap-4">
+                <img 
+                  src={rev.userPhoto || "https://www.gravatar.com/avatar/?d=mp"} 
+                  className="w-11 h-11 rounded-full object-cover border border-gray-100 shadow-sm" 
+                  alt={rev.userName} 
+                />
+                
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
+                    <span className="font-bold text-gray-900 text-sm">{rev.userName}</span>
+                    <span className="text-[10px] text-gray-400 uppercase font-medium mt-1 sm:mt-0">
+                      {rev.createdAt?.toDate ? rev.createdAt.toDate().toLocaleDateString('pt-BR') : 'Recentemente'}
+                    </span>
+                  </div>
+
+                  {/* Estrelas Amarelas */}
+                  <div className="flex mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className={`text-sm ${i < rev.rating ? 'text-yellow-400' : 'text-gray-200'}`}>
+                        ★
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Comentário com fundo leve */}
+                  <p className="text-gray-700 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-50">
+                    {rev.comment}
+                  </p>
                 </div>
-                <p className="text-gray-700 text-sm mt-1 leading-relaxed">{rev.comment}</p>
               </div>
             </div>
           ))
