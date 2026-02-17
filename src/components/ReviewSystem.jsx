@@ -10,24 +10,38 @@ export default function ReviewSystem({ productId }) {
   const [rating, setRating] = useState(5);
 
   useEffect(() => {
-    auth.onAuthStateChanged((u) => setUser(u));
+    const unsubscribeAuth = auth.onAuthStateChanged((u) => setUser(u));
     
-    // Busca apenas as avaliações DESTE produto específico
-    const q = query(
-      collection(db, "reviews"), 
-      where("productId", "==", productId),
-      orderBy("createdAt", "desc")
-    );
+    try {
+      // Busca apenas as avaliações DESTE produto específico
+      const q = query(
+        collection(db, "reviews"), 
+        where("productId", "==", productId),
+        orderBy("createdAt", "desc")
+      );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
-    });
-    return unsubscribe;
+      const unsubscribeSnap = onSnapshot(q, (snapshot) => {
+        setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      }, (error) => {
+        console.error("Erro no Firestore (Verifique o link do índice aqui):", error);
+      });
+
+      return () => {
+        unsubscribeAuth();
+        unsubscribeSnap();
+      };
+    } catch (err) {
+      console.error("Erro ao configurar consulta:", err);
+    }
   }, [productId]);
 
   const handleReview = async () => {
     if (!user) {
-      await signInWithPopup(auth, provider);
+      try {
+        await signInWithPopup(auth, provider);
+      } catch (error) {
+        console.error("Erro no login:", error);
+      }
       return;
     }
     if (!comment.trim()) return;
@@ -45,17 +59,26 @@ export default function ReviewSystem({ productId }) {
 
   return (
     <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+      {/* BARRA DE TESTE - Se você ver isso, o arquivo está sendo lido! */}
+      <div className="bg-red-600 text-white p-4 mb-6 rounded-lg text-center font-bold animate-pulse">
+        ESTOU AQUI! (O COMPONENTE FOI CARREGADO)
+      </div>
+
       <h3 className="text-xl font-bold mb-6 text-gray-800">Avaliações dos Clientes</h3>
 
       {/* Input de Comentário */}
       <div className="flex gap-4 mb-8">
-        <img src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"} className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
+        <img 
+          src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"} 
+          className="w-12 h-12 rounded-full border-2 border-white shadow-sm" 
+          alt="Avatar"
+        />
         <div className="flex-1">
           <textarea 
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder="O que você achou deste produto?"
-            className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none"
+            className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black"
             rows="3"
           />
           <div className="flex justify-between items-center mt-3">
@@ -64,7 +87,7 @@ export default function ReviewSystem({ productId }) {
               <select 
                 value={rating} 
                 onChange={(e) => setRating(Number(e.target.value))}
-                className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-sm outline-none cursor-pointer"
+                className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-sm outline-none cursor-pointer text-black"
               >
                 {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} ★</option>)}
               </select>
@@ -79,14 +102,14 @@ export default function ReviewSystem({ productId }) {
         </div>
       </div>
 
-      {/* Lista de Comentários (Estilo YouTube) */}
+      {/* Lista de Comentários */}
       <div className="space-y-6">
         {reviews.length === 0 ? (
           <p className="text-gray-500 text-center py-4">Nenhuma avaliação ainda. Seja o primeiro!</p>
         ) : (
           reviews.map((rev) => (
-            <div key={rev.id} className="flex gap-4 animate-in fade-in duration-500">
-              <img src={rev.userPhoto} className="w-10 h-10 rounded-full shadow-sm" />
+            <div key={rev.id} className="flex gap-4 border-b border-gray-100 pb-4">
+              <img src={rev.userPhoto} className="w-10 h-10 rounded-full shadow-sm" alt={rev.userName} />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <span className="font-bold text-gray-900 text-sm">{rev.userName}</span>
