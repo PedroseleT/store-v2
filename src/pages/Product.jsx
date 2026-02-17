@@ -2,7 +2,6 @@ import { useParams, Link } from "react-router-dom";
 import { products } from "../data/products";
 import { useState } from "react";
 import { ArrowLeft, MessageCircleMore } from "lucide-react";
-import ReviewSystem from "../components/ReviewSystem";
 
 export function Product() {
   const { id } = useParams();
@@ -23,6 +22,7 @@ export function Product() {
       </Link>
 
       <div className="grid md:grid-cols-2 gap-10">
+        {/* GALERIA */}
         <div>
           <div className="bg-gray-100 rounded-lg overflow-hidden group aspect-[4/5]">
             <img
@@ -46,8 +46,10 @@ export function Product() {
           </div>
         </div>
 
+        {/* INFORMAÇÕES */}
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
+            {/* BOLINHA DE STATUS */}
             <span className={`h-3 w-3 rounded-full ${isAvailable ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
             <span className="text-xs font-bold uppercase tracking-widest text-gray-500">
               {isAvailable ? 'Disponível' : 'Vendido'}
@@ -76,6 +78,7 @@ export function Product() {
             </p>
           </div>
 
+          {/* BOTÃO WHATSAPP - Só funciona se estiver disponível */}
           {isAvailable ? (
             <a
               href={whatsappUrl}
@@ -93,13 +96,6 @@ export function Product() {
           )}
         </div>
       </div>
-
-      {/* ÁREA DE TESTE CRÍTICO */}
-      <div className="mt-20 text-center text-gray-400 font-bold border-b pb-2">
-        --- TESTE DE CONEXÃO ABAIXO ---
-      </div>
-      
-      <ReviewSystem productId={id} />
     </main>
   );
 }
