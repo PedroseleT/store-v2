@@ -13,7 +13,6 @@ export default function ReviewSystem({ productId }) {
     const unsubscribeAuth = auth.onAuthStateChanged((u) => setUser(u));
     
     try {
-      // Busca apenas as avaliações DESTE produto específico
       const q = query(
         collection(db, "reviews"), 
         where("productId", "==", productId),
@@ -23,7 +22,7 @@ export default function ReviewSystem({ productId }) {
       const unsubscribeSnap = onSnapshot(q, (snapshot) => {
         setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       }, (error) => {
-        console.error("Erro no Firestore (Verifique o link do índice aqui):", error);
+        console.error("Erro no Firestore:", error);
       });
 
       return () => {
@@ -59,12 +58,7 @@ export default function ReviewSystem({ productId }) {
 
   return (
     <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
-      {/* BARRA DE TESTE - Se você ver isso, o arquivo está sendo lido! */}
-      <div className="bg-red-600 text-white p-4 mb-6 rounded-lg text-center font-bold animate-pulse">
-        ESTOU AQUI! (O COMPONENTE FOI CARREGADO)
-      </div>
-
-      <h3 className="text-xl font-bold mb-6 text-gray-800">Avaliações dos Clientes</h3>
+      <h3 className="text-xl font-bold mb-6 text-gray-800">Avaliações</h3>
 
       {/* Input de Comentário */}
       <div className="flex gap-4 mb-8">
