@@ -35,30 +35,44 @@ export default function ReviewSystem({ productId }) {
   }, [productId]);
 
   const handleReview = async () => {
-    if (!user) {
+    if (!comment.trim()) {
+        alert("Por favor, digite um comentário antes de enviar.");
+        return;
+    }
+
+    let currentUser = user;
+
+    // Se não estiver logado, faz o login primeiro
+    if (!currentUser) {
       try {
-        await signInWithPopup(auth, provider);
+        const result = await signInWithPopup(auth, provider);
+        currentUser = result.user;
+        setUser(currentUser);
       } catch (error) {
         console.error("Erro no login:", error);
+        return; // Para o fluxo se o usuário cancelar o login
       }
-      return;
     }
-    if (!comment.trim()) return;
 
-    await addDoc(collection(db, "reviews"), {
-      productId,
-      userName: user.displayName,
-      userPhoto: user.photoURL,
-      rating,
-      comment,
-      createdAt: serverTimestamp()
-    });
-    setComment("");
+    // Envia o comentário (agora com o usuário garantido)
+    try {
+        await addDoc(collection(db, "reviews"), {
+          productId,
+          userName: currentUser.displayName,
+          userPhoto: currentUser.photoURL,
+          rating,
+          comment,
+          createdAt: serverTimestamp()
+        });
+        setComment("");
+    } catch (error) {
+        console.error("Erro ao enviar:", error);
+    }
   };
 
   return (
     <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
-      <h3 className="text-xl font-bold mb-6 text-gray-800">Avaliações</h3>
+      <h3 className="text-xl font-bold mb-6 text-gray-800">Feedbacks Clientes</h3>
 
       {/* Input de Comentário */}
       <div className="flex gap-4 mb-8">
@@ -76,7 +90,6 @@ export default function ReviewSystem({ productId }) {
             rows="3"
           />
           
-          {/* CONTAINER AJUSTADO: Alinha nota e botão */}
           <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-3">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Sua nota:</span>
@@ -93,7 +106,7 @@ export default function ReviewSystem({ productId }) {
               onClick={handleReview}
               className="bg-blue-600 text-white px-6 h-[40px] rounded-lg font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md text-sm flex items-center justify-center whitespace-nowrap"
             >
-              {user ? "Publicar" : "Avaliar com Google"}
+              Enviar Feedback
             </button>
           </div>
         </div>
