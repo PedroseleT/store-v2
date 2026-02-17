@@ -2,7 +2,6 @@ import { useParams, Link } from "react-router-dom";
 import { products } from "../data/products";
 import { useState } from "react";
 import { ArrowLeft, MessageCircleMore } from "lucide-react";
-import ReviewSystem from "../components/ReviewSystem";
 
 export function Product() {
   const { id } = useParams();
