@@ -32,7 +32,7 @@ export const products = [
     name: "Camisa MCD Newspaper Skull (novo)",
     price: 49.90,
     size: "GG",
-    status: "disponivel",
+    status: "vendido",
     category: "Masculino",
     description: "Peça icônica da MCD com estampa full print que mescla colagens de jornal com a estética dark de caveiras e rosas. Confeccionada em tecido leve de alta qualidade, possui modelagem comfort e botões frontais personalizados. Uma camisa que une o lifestyle do surf com a atitude urbana.",
     images: [
