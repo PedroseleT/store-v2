@@ -125,5 +125,17 @@ export const products = [
       "/img/shorts2.jpeg",
       "/img/shorts3.jpeg"
     ]
+  },
+  {
+    id: "Blazer Masculino Alfaiataria Black Premium.",
+    name: "Blazer Masculino Preto Slim Fit.",
+    price: 139.90,
+    size: "GG",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Blazer masculino de corte slim fit clássico, ideal para ocasiões formais e eventos sociais. Confeccionado em tecido de alta qualidade com forro interno, possui dois botões frontais e lapela notched tradicional.",
+    images: [
+      "blazer.jpeg"
+    ]
   }
 ];

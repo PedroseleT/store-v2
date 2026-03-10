@@ -13,7 +13,7 @@ export function Home() {
       {/* SEÇÃO FEMININA */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
-          Feminino
+          SEÇÃO FEMININA
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {femaleProducts.map(product => (
@@ -25,7 +25,7 @@ export function Home() {
       {/* SEÇÃO MASCULINA */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
-          Masculino
+          SEÇÃO MASCULINA
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {maleProducts.length > 0 ? (
@@ -41,7 +41,7 @@ export function Home() {
       {/* SEÇÃO OUTROS */}
       <section>
         <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
-          Outros
+          DIVERSOS
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
           {otherProducts.map(product => (
