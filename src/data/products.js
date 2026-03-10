@@ -59,17 +59,15 @@ export const products = [
   },
   {
     id: "calca-tng-alfaiataria-social",
-    name: "Calça Alfaiataria TNG Socialwear (usado)",
+    name: "Calça Alfaiataria Preta - Design Minimalista",
     price: 49.90,
-    size: "44 - GG",
+    size: "G",
     status: "disponivel",
     category: "Masculino",
-    description: "Elegância clássica com um toque contemporâneo. Esta calça de alfaiataria importada da linha TNG Socialwear apresenta uma padronagem listrada fina e discreta, proporcionando um visual alongado e sofisticado. Confeccionada com tecido premium de toque leve, possui pregas frontais que garantem um caimento impecável e confortável. A escolha definitiva para ocasiões formais ou um office look de alto nível.",
+    description: "Esta calça de alfaiataria na cor preta apresenta um corte reto e estruturado, ideal para quem busca um visual sofisticado e versátil. O modelo conta com pregas frontais que garantem um caimento impecável e maior conforto ao movimento, além de bolsos laterais discretos e passantes para cinto. Com uma estética totalmente limpa, a peça não possui logomarcas ou etiquetas à mostra, reforçando um estilo minimalista que transita facilmente entre o uso casual com tênis e composições formais.",
     images: [
-      "/img/alfa1.jpeg",
-      "/img/alfa2.jpeg",
-      "/img/alfa3.jpeg",
-      "/img/alfa4.jpeg"
+      "/img/calcaa1.jpeg",
+      "/img/calcaa2.jpeg"
     ]
   },
   {
@@ -135,7 +133,21 @@ export const products = [
     category: "Masculino",
     description: "Blazer masculino de corte slim fit clássico, ideal para ocasiões formais e eventos sociais. Confeccionado em tecido de alta qualidade com forro interno, possui dois botões frontais e lapela notched tradicional.",
     images: [
-      "blazer.jpeg"
+      "/img/blazerm.jpeg"
     ]
-  }
+  },
+  {
+    id: "Calça Moletom Streetwear Black Tribal.",
+    name: "Calça Moletom Streetwear Black Tribal.",
+    price: 89.90,
+    size: "GG",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Calça de moletom premium com modelagem larga (baggy) e estilo streetwear. Apresenta estampas exclusivas de artes tribais em branco nas pernas, cós elástico com ajuste por cordão e acabamento confortável para um visual urbano moderno.",
+    images: [
+      "/img/calçabaggy1.jpeg",
+      "/img/calçabaggy2.jpeg"
+    ]
+  },
+  
 ];
