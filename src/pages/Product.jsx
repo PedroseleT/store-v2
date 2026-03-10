@@ -1,12 +1,17 @@
 import { useParams } from "react-router-dom";
 import { products } from "../data/products";
 import ReviewSystem from "../components/ReviewSystem";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // ALTERAÇÃO SOLICITADA: importação do useEffect adicionada
 
 export function Product() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const [activeImage, setActiveImage] = useState(0);
+
+  // ALTERAÇÃO SOLICITADA: Código adicionado para forçar a página a iniciar sempre no topo
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   if (!product) {
     return <div className="p-10 text-center">Produto não encontrado.</div>;
@@ -60,6 +65,16 @@ export function Product() {
             R$ {product.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
           </p>
           
+          {/* ALTERAÇÃO SOLICITADA: Botão Fale Comigo adicionado e direcionando para o WhatsApp */}
+          <a
+            href="https://wa.me/5519992676339"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl text-center shadow-md transition-all mb-8 inline-block w-full sm:w-auto"
+          >
+            Fale Comigo
+          </a>
+
           <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
             <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Descrição Detalhada</h3>
             <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">

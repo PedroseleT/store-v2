@@ -1,0 +1,1111 @@
+================================================================================
+INFORMAÇÕES DO PROJETO
+================================================================================
+
+Data da exportação: 2026-03-10 18:24:31.197132
+
+================================================================================
+ESTRUTURA DE PASTAS
+================================================================================
+
+./
+  .gitignore
+  eslint.config.js
+  exportar_para_ia.py
+  index.html
+  package.json
+  postcss.config.js
+  README.md
+  tailwind.config.js
+  vite.config.js
+  .vercel/
+    project.json
+    README.txt
+  public/
+    vite.svg
+    img/
+      blazer1.jpeg
+      blazerm.jpeg
+      cabo_iphone_1.jpg
+      cabo_iphone_2.jpg
+      cabo_iphone_3.jpg
+      calca1.jpeg
+      calca2.jpeg
+      calca3.jpeg
+      calcaa1.jpeg
+      calcaa2.jpeg
+      calçabaggy1.jpeg
+      calçabaggy2.jpeg
+      camiseta1.jpeg
+      camiseta2.jpeg
+      camiseta3.jpeg
+      camiseta4.jpeg
+      camiseta5.jpeg
+      imagemroxo1.jpeg
+      imagemroxo2.jpeg
+      imagemroxo3.jpeg
+      logo.png
+      marfinno1.jpeg
+      marfinno2.jpeg
+      marfinno3.jpeg
+      marfinno4.jpeg
+      secador1.jpeg
+      secador2.jpeg
+      secador3.jpeg
+      shorts1.jpeg
+      shorts2.jpeg
+      shorts3.jpeg
+  src/
+    App.css
+    App.jsx
+    firebaseConfig.js
+    index.css
+    main.jsx
+    assets/
+      react.svg
+    components/
+      Footer.jsx
+      Header.jsx
+      ProductCard.jsx
+      ReviewSystem.jsx
+    data/
+      products.js
+    pages/
+      Home.jsx
+      Product.jsx
+
+================================================================================
+CÓDIGO FONTE
+================================================================================
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\eslint.config.js
+--------------------------------------------------------------------------------
+
+import js from '@eslint/js'
+import globals from 'globals'
+import reactHooks from 'eslint-plugin-react-hooks'
+import reactRefresh from 'eslint-plugin-react-refresh'
+import { defineConfig, globalIgnores } from 'eslint/config'
+
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{js,jsx}'],
+    extends: [
+      js.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      ecmaVersion: 2020,
+      globals: globals.browser,
+      parserOptions: {
+        ecmaVersion: 'latest',
+        ecmaFeatures: { jsx: true },
+        sourceType: 'module',
+      },
+    },
+    rules: {
+      'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
+    },
+  },
+])
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\exportar_para_ia.py
+--------------------------------------------------------------------------------
+
+import os
+from datetime import datetime
+
+output_file = "IA_EXPORT_PROJETO.txt"
+
+# Pastas que DEVEM ser ignoradas completamente
+ignored_dirs = {
+    "node_modules",
+    ".git",
+    "__pycache__",
+    "venv",
+    ".venv",
+    "dist",
+    "build",
+    ".next",          # 🔥 IGNORA BUILD DO NEXT
+    "out",
+    "coverage"
+}
+
+ignored_files = {
+    output_file,
+    ".env",
+    ".env.local",
+    ".env.production",
+    "package-lock.json",
+    "yarn.lock"
+}
+
+allowed_extensions = {
+    ".py", ".js", ".ts", ".tsx", ".jsx",
+    ".html", ".css", ".json", ".md",
+    ".sql"
+}
+
+max_file_size_kb = 300
+
+
+def should_ignore_path(path):
+    parts = path.split(os.sep)
+    return any(part in ignored_dirs for part in parts)
+
+
+def file_is_valid(path):
+    if should_ignore_path(path):
+        return False
+
+    if os.path.basename(path) in ignored_files:
+        return False
+
+    if os.path.splitext(path)[1].lower() not in allowed_extensions:
+        return False
+
+    if os.path.getsize(path) > max_file_size_kb * 1024:
+        return False
+
+    return True
+
+
+def generate_tree():
+    tree = []
+
+    for root, dirs, files in os.walk("."):
+        dirs[:] = [d for d in dirs if d not in ignored_dirs]
+
+        if should_ignore_path(root):
+            continue
+
+        level = root.count(os.sep)
+        indent = "  " * level
+        tree.append(f"{indent}{os.path.basename(root)}/")
+
+        sub_indent = "  " * (level + 1)
+        for file in files:
+            if file not in ignored_files:
+                tree.append(f"{sub_indent}{file}")
+
+    return "\n".join(tree)
+
+
+file_count = 0
+line_count = 0
+
+with open(output_file, "w", encoding="utf-8") as outfile:
+
+    outfile.write("=" * 80 + "\n")
+    outfile.write("INFORMAÇÕES DO PROJETO\n")
+    outfile.write("=" * 80 + "\n\n")
+    outfile.write(f"Data da exportação: {datetime.now()}\n\n")
+
+    outfile.write("=" * 80 + "\n")
+    outfile.write("ESTRUTURA DE PASTAS\n")
+    outfile.write("=" * 80 + "\n\n")
+    outfile.write(generate_tree())
+    outfile.write("\n\n")
+
+    outfile.write("=" * 80 + "\n")
+    outfile.write("CÓDIGO FONTE\n")
+    outfile.write("=" * 80 + "\n\n")
+
+    for root, dirs, files in os.walk("."):
+        dirs[:] = [d for d in dirs if d not in ignored_dirs]
+
+        if should_ignore_path(root):
+            continue
+
+        for file in files:
+            file_path = os.path.join(root, file)
+
+            if file_is_valid(file_path):
+                file_count += 1
+
+                outfile.write("\n" + "-" * 80 + "\n")
+                outfile.write(f"ARQUIVO: {file_path}\n")
+                outfile.write("-" * 80 + "\n\n")
+
+                try:
+                    with open(file_path, "r", encoding="utf-8") as f:
+                        content = f.read()
+                        line_count += content.count("\n")
+                        outfile.write(content)
+                        outfile.write("\n\n")
+                except Exception as e:
+                    outfile.write(f"[ERRO AO LER ARQUIVO: {e}]\n\n")
+
+    outfile.write("=" * 80 + "\n")
+    outfile.write("RESUMO\n")
+    outfile.write("=" * 80 + "\n\n")
+    outfile.write(f"Total de arquivos exportados: {file_count}\n")
+    outfile.write(f"Total de linhas de código: {line_count}\n")
+
+print("✅ Exportação limpa concluída.")
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\index.html
+--------------------------------------------------------------------------------
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>store</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\package.json
+--------------------------------------------------------------------------------
+
+{
+  "name": "store",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "firebase": "^12.9.0",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.12.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "vite": "npm:rolldown-vite@7.2.5"
+  },
+  "overrides": {
+    "vite": "npm:rolldown-vite@7.2.5"
+  }
+}
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\postcss.config.js
+--------------------------------------------------------------------------------
+
+export default {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+}
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\README.md
+--------------------------------------------------------------------------------
+
+
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\tailwind.config.js
+--------------------------------------------------------------------------------
+
+/** @type {import('tailwindcss').Config} */
+export default {
+  content: [
+    "./index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+}
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\vite.config.js
+--------------------------------------------------------------------------------
+
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [react()],
+})
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\.vercel\project.json
+--------------------------------------------------------------------------------
+
+{"projectId":"prj_uwuD4TpRHADEyalRqGo2HXq5Ztlk","orgId":"team_cnsC7ACaapuvGp72iIPgMERB","projectName":"store"}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\App.css
+--------------------------------------------------------------------------------
+
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\App.jsx
+--------------------------------------------------------------------------------
+
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Home } from "./pages/Home";
+import { Product } from "./pages/Product";
+import { Header } from "./components/Header";
+import { Footer } from "./components/Footer";
+import ReviewSystem from "./components/ReviewSystem";
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/produto/:id" element={<Product />} />
+          </Routes>
+        </main>
+
+        {/* ESTE É O SEGREDO: 
+           Colocamos o ReviewSystem FORA do <Routes>. 
+           Assim, ele aparece na Home e em qualquer outra página, 
+           sempre antes do Footer de créditos.
+        */}
+        <div className="max-w-6xl mx-auto w-full px-6 mb-10">
+          <ReviewSystem productId="geral" />
+        </div>
+        
+        <Footer />
+      </div>
+    </BrowserRouter>
+  );
+}
+
+export default App;
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\firebaseConfig.js
+--------------------------------------------------------------------------------
+
+import { initializeApp } from "firebase/app";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCK2rw1PSmfpIxlJdlEMWQRNikfJuy17aY",
+  authDomain: "store-teles.firebaseapp.com",
+  projectId: "store-teles",
+  storageBucket: "store-teles.firebasestorage.app",
+  messagingSenderId: "349222177486",
+  appId: "1:349222177486:web:2e95df839c51b276575e9f",
+  measurementId: "G-GG20CL9C4J"
+};
+
+// Inicializa o Firebase
+const app = initializeApp(firebaseConfig);
+
+// Exporta os serviços que vamos usar
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
+export const db = getFirestore(app);
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\index.css
+--------------------------------------------------------------------------------
+
+@import "tailwindcss";
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\main.jsx
+--------------------------------------------------------------------------------
+
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.jsx'
+
+createRoot(document.getElementById('root')).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+)
+
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\components\Footer.jsx
+--------------------------------------------------------------------------------
+
+export function Footer() {
+  const currentYear = new Date().getFullYear();
+
+  return (
+    <footer className="border-t bg-white mt-auto">
+      <div className="max-w-full mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-2">
+        
+        {/* Lado Esquerdo: Copyright */}
+        <p className="text-[9px] text-gray-400 uppercase tracking-[0.2em]">
+          © {currentYear} Todos os direitos reservados.
+        </p>
+
+        {/* Direita: Créditos */}
+        <p className="text-[10px] text-gray-500">
+          Developed by <span className="font-bold text-black border-b border-black">Pedro Teles</span>
+        </p>
+
+      </div>
+    </footer>
+  );
+}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\components\Header.jsx
+--------------------------------------------------------------------------------
+
+import { Link } from "react-router-dom";
+
+export function Header() {
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-full mx-auto px-4 py-2 grid grid-cols-3 items-center">
+        
+        {/* COLUNA 1: LOGO */}
+        <div className="flex justify-start">
+          <Link to="/">
+            <img
+              src="/img/logo.png"
+              alt="Logo da loja"
+              className="h-20 w-auto object-contain" 
+            />
+          </Link>
+        </div>
+
+        {/* COLUNA 2: TEXTO CENTRALIZADO */}
+        <div className="flex justify-center">
+          <h2 className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-[0.2em] text-center leading-tight">
+          </h2>
+        </div>
+
+        {/* COLUNA 3: ESPAÇO VAZIO (Para equilibrar o centro) */}
+        <div className="flex justify-end">
+          {/* Espaço reservado para ícone de carrinho no futuro */}
+        </div>
+
+      </div>
+    </header>
+  );
+}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\components\ProductCard.jsx
+--------------------------------------------------------------------------------
+
+import { Link } from "react-router-dom";
+
+export function ProductCard({ product }) {
+  const isAvailable = product.status === "disponivel";
+
+  return (
+    <Link to={`/produto/${product.id}`} className="group">
+      <div className="overflow-hidden rounded-lg bg-gray-100 relative">
+        {/* IMAGEM DO PRODUTO */}
+        <img
+          src={product.images[0]}
+          alt={product.name}
+          className="w-full h-72 object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+
+        {/* BOLINHA DE STATUS NO CANTO DA FOTO */}
+        <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full shadow-sm border border-gray-100">
+          <span className={`h-2 w-2 rounded-full ${isAvailable ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`}></span>
+          <span className="text-[9px] font-black uppercase tracking-tighter text-gray-800">
+            {isAvailable ? 'Disponível' : 'Vendido'}
+          </span>
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <div className="flex justify-between items-start gap-2">
+          <h2 className="text-sm font-medium">
+            {product.name}
+          </h2>
+          {/* TAMANHO DISCRETO AO LADO DO NOME */}
+          <span className="text-[10px] font-bold text-gray-400 border border-gray-200 px-1.5 rounded flex-shrink-0">
+            {product.size}
+          </span>
+        </div>
+
+        <p className="text-base font-bold mt-1 text-green-600">
+          R$ {product.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\components\ReviewSystem.jsx
+--------------------------------------------------------------------------------
+
+import { useState, useEffect } from 'react';
+import { auth, provider, db } from '../firebaseConfig';
+import { signInWithPopup } from 'firebase/auth';
+import { collection, addDoc, query, orderBy, onSnapshot, serverTimestamp, where } from 'firebase/firestore';
+
+export default function ReviewSystem({ productId }) {
+  const [user, setUser] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [comment, setComment] = useState("");
+  const [rating, setRating] = useState(5);
+
+  useEffect(() => {
+    const unsubscribeAuth = auth.onAuthStateChanged((u) => setUser(u));
+    
+    try {
+      const q = query(
+        collection(db, "reviews"), 
+        where("productId", "==", productId),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubscribeSnap = onSnapshot(q, (snapshot) => {
+        setReviews(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
+      }, (error) => {
+        console.error("Erro no Firestore:", error);
+      });
+
+      return () => {
+        unsubscribeAuth();
+        unsubscribeSnap();
+      };
+    } catch (err) {
+      console.error("Erro ao configurar consulta:", err);
+    }
+  }, [productId]);
+
+  const handleReview = async () => {
+    if (!comment.trim()) {
+        alert("Por favor, digite um comentário antes de enviar.");
+        return;
+    }
+
+    let currentUser = user;
+
+    if (!currentUser) {
+      try {
+        const result = await signInWithPopup(auth, provider);
+        currentUser = result.user;
+        setUser(currentUser);
+      } catch (error) {
+        if (error.code === 'auth/unauthorized-domain') {
+            alert("Domínio não autorizado. Verifique as configurações do Firebase.");
+        }
+        console.error("Erro no login:", error);
+        return; 
+      }
+    }
+
+    try {
+        await addDoc(collection(db, "reviews"), {
+          productId,
+          userName: currentUser.displayName,
+          userPhoto: currentUser.photoURL,
+          rating,
+          comment,
+          createdAt: serverTimestamp()
+        });
+        setComment("");
+        alert("Feedback enviado com sucesso!");
+    } catch (error) {
+        console.error("Erro ao enviar:", error);
+        alert("Ocorreu um erro ao enviar seu feedback.");
+    }
+  };
+
+  return (
+    <div className="mt-12 p-6 bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+      <h3 className="text-xl font-bold mb-6 text-gray-800">Feedbacks Clientes</h3>
+
+      {/* Área de Input de Feedback */}
+      <div className="flex gap-4 mb-10">
+        <img 
+          src={user?.photoURL || "https://www.gravatar.com/avatar/?d=mp"} 
+          className="w-12 h-12 rounded-full border-2 border-white shadow-sm" 
+          alt="Avatar"
+        />
+        <div className="flex-1">
+          <textarea 
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            placeholder="Qual produto você comprou? E o que você achou deste produto?"
+            className="w-full p-4 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 outline-none transition-all resize-none text-black bg-white"
+            rows="3"
+          />
+          
+          <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-3">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-600 whitespace-nowrap">Sua nota:</span>
+              <select 
+                value={rating} 
+                onChange={(e) => setRating(Number(e.target.value))}
+                className="bg-white border border-gray-300 rounded-lg px-2 h-[40px] text-sm outline-none cursor-pointer text-black min-w-[70px]"
+              >
+                {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} ★</option>)}
+              </select>
+            </div>
+
+            <button 
+              onClick={handleReview}
+              className="bg-blue-600 text-white px-6 h-[40px] rounded-lg font-semibold hover:bg-blue-700 active:scale-95 transition-all shadow-md text-sm flex items-center justify-center whitespace-nowrap"
+            >
+              Enviar Feedback
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Lista de Feedbacks Estilo Shopee */}
+      <div className="space-y-4">
+        {reviews.length === 0 ? (
+          <div className="text-center py-10 bg-white rounded-xl border-2 border-dashed border-gray-200">
+            <p className="text-gray-400">Nenhuma avaliação ainda. Seja o primeiro a comentar!</p>
+          </div>
+        ) : (
+          reviews.map((rev) => (
+            <div key={rev.id} className="bg-white p-5 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
+              <div className="flex gap-4">
+                <img 
+                  src={rev.userPhoto || "https://www.gravatar.com/avatar/?d=mp"} 
+                  className="w-11 h-11 rounded-full object-cover border border-gray-100 shadow-sm" 
+                  alt={rev.userName} 
+                />
+                
+                <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-2">
+                    <span className="font-bold text-gray-900 text-sm">{rev.userName}</span>
+                    <span className="text-[10px] text-gray-400 uppercase font-medium mt-1 sm:mt-0">
+                      {rev.createdAt?.toDate ? rev.createdAt.toDate().toLocaleDateString('pt-BR') : 'Recentemente'}
+                    </span>
+                  </div>
+
+                  {/* Estrelas Amarelas */}
+                  <div className="flex mb-3">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className={`text-sm ${i < rev.rating ? 'text-yellow-400' : 'text-gray-200'}`}>
+                        ★
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Comentário com fundo leve */}
+                  <p className="text-gray-700 text-sm leading-relaxed bg-gray-50 p-3 rounded-lg border border-gray-50">
+                    {rev.comment}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  );
+}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\data\products.js
+--------------------------------------------------------------------------------
+
+export const products = [
+  {
+    id: "cabo-apple-lightning-usbc",
+    name: "Cabo ORIGINAL Apple Lightning para USB-C (nunca usado)",
+    price: 99.90,
+    size: "1m",
+    status: "vendido",
+    category: "Outros",
+    description: "Conectividade de alta performance e carregamento ultra rápido. Este cabo conecta seu iPhone, iPad ou iPod com conector Lightning diretamente à porta USB-C do seu computador ou adaptador de energia para uma recarga eficiente. Compatível com a tecnologia Fast Charge, permite carregar até 50% da bateria em 30 minutos em modelos compatíveis. Design minimalista e autêntico 'Designed by Apple in California'.",
+    images: [
+      "/img/cabo_iphone_1.jpg",
+      "/img/cabo_iphone_2.jpg",
+      "/img/cabo_iphone_3.jpg"
+    ]
+  },
+  {
+    id: "calca-jeans-baggy",
+    name: "Calça Jeans Super Baggy - Light Blue (novo)",
+    price: 49.90,
+    size: "42/43 - GG",
+    status: "Vendido",
+    category: "Masculino",
+    description: "Com uma lavagem clara e atemporal, esta calça super baggy traz o equilíbrio perfeito entre o conforto e a tendência oversized. Confeccionada em denim de alta qualidade, possui modelagem ampla que garante liberdade de movimento e um visual urbano autêntico. Ideal para compor looks que vão do casual ao streetwear com facilidade.",
+    images: [
+      "/img/calca2.jpeg",
+      "/img/calca1.jpeg",
+      "/img/calca3.jpeg"
+    ]
+  },
+  {
+    id: "camisa-mcd-newspaper",
+    name: "Camisa MCD Newspaper Skull (novo)",
+    price: 49.90,
+    size: "GG",
+    status: "vendido",
+    category: "Masculino",
+    description: "Peça icônica da MCD com estampa full print que mescla colagens de jornal com a estética dark de caveiras e rosas. Confeccionada em tecido leve de alta qualidade, possui modelagem comfort e botões frontais personalizados. Uma camisa que une o lifestyle do surf com a atitude urbana.",
+    images: [
+      "/img/camiseta5.jpeg",
+      "/img/camiseta2.jpeg",
+      "/img/camiseta3.jpeg",
+      "/img/camiseta4.jpeg"
+    ]
+  },
+  {
+    id: "polo-marfinno-peruano",
+    name: "Polo Marfinno Algodão Peruano Slim (usado)",
+    price: 49.90,
+    size: "P",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Conforto excepcional em uma peça atemporal. Esta polo Marfinno é confeccionada em algodão peruano de fibra longa, garantindo um toque extremamente macio e maior durabilidade. Sua modelagem Slim Fit oferece um caimento ajustado e moderno, ideal para looks casuais sofisticados ou ambientes de trabalho informais.",
+    images: [
+      "/img/marfinno1.jpeg",
+      "/img/marfinno2.jpeg",
+      "/img/marfinno3.jpeg",
+      "/img/marfinno4.jpeg",
+    ]
+  },
+  {
+    id: "calca-tng-alfaiataria-social",
+    name: "Calça Alfaiataria Preta - Design Minimalista",
+    price: 49.90,
+    size: "G",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Esta calça de alfaiataria na cor preta apresenta um corte reto e estruturado, ideal para quem busca um visual sofisticado e versátil. O modelo conta com pregas frontais que garantem um caimento impecável e maior conforto ao movimento, além de bolsos laterais discretos e passantes para cinto. Com uma estética totalmente limpa, a peça não possui logomarcas ou etiquetas à mostra, reforçando um estilo minimalista que transita facilmente entre o uso casual com tênis e composições formais.",
+    images: [
+      "/img/calcaa1.jpeg",
+      "/img/calcaa2.jpeg"
+    ]
+  },
+  {
+    id: "secador-mondial-white-rose",
+    name: "Secador Mondial White Rose Line (usado)",
+    price: 119.90,
+    size: "2000W",
+    status: "vendido",
+    category: "Outros",
+    description: "Potência e sofisticação para o cuidado dos seus cabelos. O secador Mondial da linha White Rose conta com tecnologia Tourmaline Ion, que libera íons para selar as cutículas, garantindo brilho intenso e zero frizz. Com 2000W de potência, oferece 3 temperaturas e jato de ar frio para fixar a modelagem. Design elegante e ergonômico para resultados de salão em casa.",
+    images: [
+      "/img/secador1.jpeg",
+      "/img/secador2.jpeg",
+      "/img/secador3.jpeg"
+    ]
+  },
+  {
+    id: "macaquinho-roxo-ziper",
+    name: "Macaquinho Canelado Roxo com Zíper",
+    price: 59.90,
+    size: "M",
+    status: "disponivel",
+    category: "Feminino",
+    description: "Macaquinho casual em tecido canelado roxo, com fechamento frontal por zíper e gola. Confortável e estiloso para o dia a dia.",
+    images: [
+      "/img/imagemroxo1.jpeg",
+      "/img/imagemroxo2.jpeg",
+      "/img/imagemroxo3.jpeg"
+    ]
+  },
+  {
+    id: "blazer-alfaiataria-preto",
+    name: "Blazer Alfaiataria Feminino Preto",
+    price: 55.90,
+    size: "G",
+    status: "disponivel",
+    category: "Feminino",
+    description: "Blazer estruturado em alfaiataria com gola alta e fechamento invisível. Design moderno e acinturado, ideal para looks sofisticados e profissionais.",
+    images: [
+      "/img/blazer1.jpeg"
+    ]
+  },
+  {
+    id: "short-jeans-desfiado",
+    name: "Short Jeans Feminino Desfiado",
+    price: 49.90,
+    size: "38",
+    status: "disponivel",
+    category: "Feminino",
+    description: "Short jeans clássico com lavagem média e acabamento desfiado na barra. Possui bolsos funcionais e caimento confortável para looks de verão.",
+    images: [
+      "/img/shorts1.jpeg",
+      "/img/shorts2.jpeg",
+      "/img/shorts3.jpeg"
+    ]
+  },
+  {
+    id: "Blazer Masculino Alfaiataria Black Premium.",
+    name: "Blazer Masculino Preto Slim Fit.",
+    price: 139.90,
+    size: "GG",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Blazer masculino de corte slim fit clássico, ideal para ocasiões formais e eventos sociais. Confeccionado em tecido de alta qualidade com forro interno, possui dois botões frontais e lapela notched tradicional.",
+    images: [
+      "/img/blazerm.jpeg"
+    ]
+  },
+  {
+    id: "Calça Moletom Streetwear Black Tribal.",
+    name: "Calça Moletom Streetwear Black Tribal.",
+    price: 89.90,
+    size: "GG",
+    status: "disponivel",
+    category: "Masculino",
+    description: "Calça de moletom premium com modelagem larga (baggy) e estilo streetwear. Apresenta estampas exclusivas de artes tribais em branco nas pernas, cós elástico com ajuste por cordão e acabamento confortável para um visual urbano moderno.",
+    images: [
+      "/img/calçabaggy1.jpeg",
+      "/img/calçabaggy2.jpeg"
+    ]
+  },
+  
+];
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\pages\Home.jsx
+--------------------------------------------------------------------------------
+
+import { products } from "../data/products";
+import { ProductCard } from "../components/ProductCard";
+
+export function Home() {
+  // Filtros de categoria
+  const femaleProducts = products.filter(p => p.category === "Feminino");
+  const maleProducts = products.filter(p => p.category === "Masculino");
+  const otherProducts = products.filter(p => p.category === "Outros");
+
+  return (
+    <main className="max-w-6xl mx-auto px-6 py-8 space-y-12">
+      
+      {/* SEÇÃO FEMININA */}
+      <section>
+        <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
+          SEÇÃO FEMININA
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {femaleProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+      {/* SEÇÃO MASCULINA */}
+      <section>
+        <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
+          SEÇÃO MASCULINA
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {maleProducts.length > 0 ? (
+            maleProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          ) : (
+            <p className="text-sm text-gray-400 italic">Em breve novidades masculinas...</p>
+          )}
+        </div>
+      </section>
+
+      {/* SEÇÃO OUTROS */}
+      <section>
+        <h2 className="text-xl font-bold mb-6 text-gray-800 border-b pb-2 uppercase tracking-widest">
+          DIVERSOS
+        </h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {otherProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </section>
+
+    </main>
+  );
+}
+
+
+--------------------------------------------------------------------------------
+ARQUIVO: .\src\pages\Product.jsx
+--------------------------------------------------------------------------------
+
+import { useParams } from "react-router-dom";
+import { products } from "../data/products";
+import ReviewSystem from "../components/ReviewSystem";
+import { useState } from "react";
+
+export function Product() {
+  const { id } = useParams();
+  const product = products.find((p) => p.id === id);
+  const [activeImage, setActiveImage] = useState(0);
+
+  if (!product) {
+    return <div className="p-10 text-center">Produto não encontrado.</div>;
+  }
+
+  const isAvailable = product.status.toLowerCase() === "disponivel";
+
+  return (
+    <main className="max-w-6xl mx-auto px-6 py-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+        {/* Galeria de Imagens */}
+        <div className="space-y-4">
+          <div className="rounded-2xl overflow-hidden bg-gray-100 shadow-sm border border-gray-100">
+            <img 
+              src={product.images[activeImage]} 
+              alt={product.name} 
+              className="w-full h-[500px] object-cover transition-all duration-300"
+            />
+          </div>
+          {/* Miniaturas */}
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {product.images.map((img, index) => (
+              <button
+                key={index}
+                onClick={() => setActiveImage(index)}
+                className={`w-20 h-20 rounded-lg overflow-hidden border-2 flex-shrink-0 transition-all ${
+                  activeImage === index ? "border-blue-600 scale-95" : "border-transparent opacity-60"
+                }`}
+              >
+                <img src={img} className="w-full h-full object-cover" alt="miniatura" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Detalhes */}
+        <div className="flex flex-col py-4">
+          <div className="flex items-center gap-3 mb-6">
+            <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-tighter shadow-sm border ${
+              isAvailable ? 'bg-green-50 border-green-200 text-green-700' : 'bg-red-50 border-red-200 text-red-700'
+            }`}>
+              {isAvailable ? 'Disponível' : 'Vendido'}
+            </span>
+            <span className="text-xs font-bold text-gray-400 bg-gray-100 px-3 py-1.5 rounded-full">
+              TAMANHO {product.size}
+            </span>
+          </div>
+
+          <h1 className="text-4xl font-extrabold text-gray-900 mb-2 leading-tight">{product.name}</h1>
+          <p className="text-3xl font-black text-green-600 mb-8">
+            R$ {product.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+          </p>
+          
+          <div className="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 mb-3">Descrição Detalhada</h3>
+            <p className="text-gray-700 leading-relaxed text-sm whitespace-pre-line">
+              {product.description}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-20">
+        <ReviewSystem productId={product.id} />
+      </div>
+    </main>
+  );
+}
+
+================================================================================
+RESUMO
+================================================================================
+
+Total de arquivos exportados: 21
+Total de linhas de código: 878

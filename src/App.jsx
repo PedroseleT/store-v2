@@ -13,7 +13,15 @@ function App() {
         
         <main className="flex-grow">
           <Routes>
-            <Route path="/" element={<Home />} />
+            {/* # ALTERAÇÃO SOLICITADA: ReviewSystem encapsulado na rota principal para aparecer apenas na Home */}
+            <Route path="/" element={
+              <>
+                <Home />
+                <div className="max-w-6xl mx-auto w-full px-6 mb-10">
+                  <ReviewSystem productId="geral" />
+                </div>
+              </>
+            } />
             <Route path="/produto/:id" element={<Product />} />
           </Routes>
         </main>
@@ -23,9 +31,7 @@ function App() {
            Assim, ele aparece na Home e em qualquer outra página, 
            sempre antes do Footer de créditos.
         */}
-        <div className="max-w-6xl mx-auto w-full px-6 mb-10">
-          <ReviewSystem productId="geral" />
-        </div>
+        {/* # ALTERAÇÃO SOLICITADA: Chamada global do ReviewSystem removida daqui */}
         
         <Footer />
       </div>
